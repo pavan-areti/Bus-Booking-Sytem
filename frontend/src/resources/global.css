@@ -1,0 +1,48 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 10px;
+}
+/* heights and widths */
+.h-screen{
+    height: 100vh;
+}
+
+.w-300{
+    width: 30rem;
+}
+
+
+.card{
+    border: 2px solid grey;
+    box-shadow: 0 0 1rem rgba(0,0,0,0.1);
+}
+
+.auth-form-heading{
+    border-bottom: 1px solid grey;
+}
+
+.text-2x{
+    font-size: 2rem;
+}
+.text-3x{
+    font-size: 3rem;
+}
+.text-4x{
+    font-size: 4rem;
+}
+
+a{
+    text-decoration: none;
+}
+.btn-primary{
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+
+}

@@ -1,10 +1,21 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import "./resources/global.css";
 
-function App() {
+const App = () => {
   return (
-    <div className="App mt-5">
-
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
