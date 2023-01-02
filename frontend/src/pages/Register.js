@@ -1,9 +1,32 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import React,{useEffect} from "react";
+import { Button, Checkbox, Form, Input,message } from "antd";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const Register = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(localStorage.getItem("token")){
+      navigate("/");
+    }
+  }, [])
+  
+  const onFinish = async (values) => {
+    try {
+      const res = await axios.post(
+        "/api/users/register",
+        values
+      );
+      console.log(res);
+      if(res.data.success){
+        message.success(res.data.message);
+      }
+      else{
+        message.error(res.data.message);
+      }
+    } catch (err) {
+       message.error(err.message);
+    }
   };
   return (
     <div className="h-screen d-flex flex-column justify-content-center align-items-center">
@@ -16,10 +39,10 @@ const Register = () => {
           autoComplete="off"
           onFinish={onFinish}
         >
-          <Form.Item label="Username" name="username">
+          <Form.Item label="Username" name="name">
             <Input />
           </Form.Item>
-          <Form.Item label="Email" name="Email">
+          <Form.Item label="Email" name="email">
             <Input type="email" />
           </Form.Item>
           <Form.Item label="Password" name="password">
