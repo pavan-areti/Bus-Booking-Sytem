@@ -2,9 +2,12 @@ import React,{useEffect} from "react";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../redux/alertsSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if(localStorage.getItem("token")){
       navigate("/");
@@ -12,8 +15,10 @@ const Login = () => {
   }, [])
   const onFinish = async (values) => {
     try {
+      dispatch(showLoading());
       const res = await axios.post("/api/users/login", values);
       console.log(res);
+      dispatch(hideLoading());
       if (res.data.success) {
         message.success(res.data.message);
         localStorage.setItem("token", res.data.data);
@@ -22,6 +27,7 @@ const Login = () => {
         message.error(res.data.message);
       }
     } catch (err) {
+      dispatch(hideLoading());
       message.error(err.message);
     }
   };

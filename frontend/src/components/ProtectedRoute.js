@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/usersSlice";
+import { hideLoading, showLoading } from "../redux/alertsSlice";
 
 function ProtectedRoute({ children }) {
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.alerts) 
   const navigate = useNavigate();
 
   const validateToken = async (token) => {
     try {
+      dispatch(showLoading());
       const res = await axios.post(
         "/api/users/get-user-by-id",
         {},
@@ -19,17 +24,16 @@ function ProtectedRoute({ children }) {
         }
       );
 
+      dispatch(hideLoading());
       if (res.data.success) {
-        setLoading(false);
+        dispatch(setUser(res.data.data));
       } else {
-        setLoading(false);
         localStorage.removeItem("token");
         message.error(res.data.message);
         navigate("/login");
       }
     } catch (err) {
       console.log(err);
-      setLoading(false);
       navigate("/login");
     }
   };

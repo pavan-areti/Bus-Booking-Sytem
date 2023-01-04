@@ -2,9 +2,12 @@ import React,{useEffect} from "react";
 import { Button, Checkbox, Form, Input,message } from "antd";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
+import { hideLoading, showLoading } from "../redux/alertsSlice";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if(localStorage.getItem("token")){
       navigate("/");
@@ -13,11 +16,13 @@ const Register = () => {
   
   const onFinish = async (values) => {
     try {
+      dispatch(showLoading());
       const res = await axios.post(
         "/api/users/register",
         values
       );
       console.log(res);
+      dispatch(hideLoading());
       if(res.data.success){
         message.success(res.data.message);
       }
@@ -25,6 +30,7 @@ const Register = () => {
         message.error(res.data.message);
       }
     } catch (err) {
+      dispatch(hideLoading());
        message.error(err.message);
     }
   };

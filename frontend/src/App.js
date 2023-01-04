@@ -5,10 +5,14 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./resources/global.css";
+import Loader from "./components/Loader";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const {loading} = useSelector(state => state.alerts)
   return (
     <div className="App">
+      {loading && <Loader />}
       <Router>
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
