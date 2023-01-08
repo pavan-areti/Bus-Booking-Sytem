@@ -5,10 +5,11 @@ import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/usersSlice";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
+import DefaultLayout from "./DefaultLayout";
 
 function ProtectedRoute({ children }) {
   const dispatch = useDispatch();
-  const {loading} = useSelector(state => state.alerts) 
+  const { user} = useSelector((state) => state.users);
   const navigate = useNavigate();
 
   const validateToken = async (token) => {
@@ -39,14 +40,14 @@ function ProtectedRoute({ children }) {
   };
 
   useEffect(() => {
-    const token =  localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
     } else {
       validateToken(token);
     }
   }, []);
-  return <>{ loading ? <div>Loading</div> : <div>{children}</div>}</>
+  return <>{user && <DefaultLayout>{children}</DefaultLayout>}</>;
 }
 
 export default ProtectedRoute;

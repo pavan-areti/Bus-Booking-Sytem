@@ -8,7 +8,9 @@ app.use(express.json());
 
 
 const usersRoute = require('./routes/usersRoute');
+const busesRoute = require('./routes/busesRoute');
 
 app.use('/api/users', usersRoute);
+app.use('/api/buses', busesRoute);
 //listen to port
 app.listen(port, () => console.log(`Listening on port ${port}`));

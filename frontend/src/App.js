@@ -7,15 +7,25 @@ import Register from "./pages/Register";
 import "./resources/global.css";
 import Loader from "./components/Loader";
 import { useSelector } from "react-redux";
+import AdminHome from "./pages/Admin/AdminHome";
+import AdminBuses from "./pages/Admin/AdminBuses";
+import AdminUsers from "./pages/Admin/AdminUsers";
 
 const App = () => {
-  const {loading} = useSelector(state => state.alerts)
+  const { loading } = useSelector((state) => state.alerts);
   return (
     <div className="App">
       {loading && <Loader />}
       <Router>
         <Routes>
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/login"
             element={
@@ -32,6 +42,30 @@ const App = () => {
               </PublicRoute>
             }
           />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminHome/>
+              </ProtectedRoute>
+            }
+          /> 
+          <Route
+            path="/admin/buses"
+            element={
+              <ProtectedRoute>
+                <AdminBuses/>
+              </ProtectedRoute>
+            }
+          /> 
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute>
+                <AdminUsers/>
+              </ProtectedRoute>
+            }
+          />                              
         </Routes>
       </Router>
     </div>

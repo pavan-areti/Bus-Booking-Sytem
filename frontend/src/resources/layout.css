@@ -1,0 +1,52 @@
+.layout-parent{
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    padding: 1.5rem;
+    gap: 2rem;
+}
+
+.body{
+    width: 100%;
+}
+.header{
+    box-shadow: 0 0 1rem rgba(0,0,0,0.1);
+    width : 100%;
+    padding: 1rem 2rem;
+}
+
+.header i{
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+.active-menu-item{
+    border: 2px solid white;
+    border-radius: 0.5rem;
+}
+
+.side-bar{
+    width: 30rem;
+    background-color:#1b7aff;
+    border-radius: 0.5rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.menu-item{
+    padding: 1rem;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+}
+
+.menu-item-name{
+    font-size: 1.5rem;
+}
+.menu-icon i{
+    font-size: 2rem;
+}
+.content{
+    padding : 2rem;
+}
