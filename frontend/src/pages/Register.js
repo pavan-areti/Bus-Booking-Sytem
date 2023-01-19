@@ -25,6 +25,7 @@ const Register = () => {
       dispatch(hideLoading());
       if(res.data.success){
         message.success(res.data.message);
+        navigate("/login");
       }
       else{
         message.error(res.data.message);

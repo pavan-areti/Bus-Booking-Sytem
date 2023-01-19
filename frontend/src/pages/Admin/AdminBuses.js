@@ -10,6 +10,8 @@ function AdminBuses() {
   const dispatch = useDispatch();
   const [showBusForm, setShowBusForm] = React.useState(false);
   const [buses, setBuses] = React.useState([]);
+  const [selectedBus, setSelectedBus] = React.useState(null);
+
   const columns = [
     {
       title: "Bus Name",
@@ -34,9 +36,6 @@ function AdminBuses() {
     {
       title: "journey Date",
       dataIndex: "date",
-      render: (date) => {
-        return moment(date).format("DD-MM-YYYY");
-      },
     },
     {
       title: "Price",
@@ -52,8 +51,19 @@ function AdminBuses() {
       render: (action, record) => {
         return (
           <div className="d-flex flex-row gap-4">
-            <i className="ri-delete-bin-line "></i>
-            <i className="ri-pencil-line"></i>
+            <i
+              className="ri-delete-bin-line "
+              onClick={() => {
+                deleteBus(record._id);
+              }}
+            ></i>
+            <i
+              className="ri-pencil-line"
+              onClick={() => {
+                setSelectedBus(record);
+                setShowBusForm(true);
+              }}
+            ></i>
           </div>
         );
       },
@@ -75,6 +85,27 @@ function AdminBuses() {
       console.log(err);
     }
   };
+
+  //delete bus
+  const deleteBus = async (id) => {
+    try {
+      dispatch(showLoading());
+      const response = await axiosInstance.post("/api/buses/delete-bus", {
+        id,
+      });
+      dispatch(hideLoading());
+      if (response.data.success) {
+        message.success(response.data.message);
+        getBuses();
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     getBuses();
   }, []);
@@ -102,7 +133,10 @@ function AdminBuses() {
         <BusForm
           showBusForm={showBusForm}
           setShowBusForm={setShowBusForm}
-          type="add"
+          type={selectedBus ? "edit" : "add"}
+          selectedBus={selectedBus}
+          getData={getBuses}
+          setSelectedBus={setSelectedBus}
         />
       )}
     </div>
