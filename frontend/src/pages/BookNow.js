@@ -5,9 +5,11 @@ import { axiosInstance } from "../helpers/axiosInstance";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
 import { useParams } from "react-router-dom";
 import SeatSelection from "../components/SeatSelection";
+import "../resources/bus.css";
 
 function BookNow() {
   const [bus, setBus] = React.useState([]);
+  const [selectedSeats, setSelectedSeats] = React.useState([]);
   const dispatch = useDispatch();
   const params = useParams();
   //get buses
@@ -30,6 +32,24 @@ function BookNow() {
     }
   };
 
+  const bookNow = async () => {
+    try {
+      dispatch(showLoading());
+      const response = await axiosInstance.post("/api/bookings/book-seats", {
+        bus: params.id,
+        seats: selectedSeats,
+      });
+      dispatch(hideLoading());
+      if (response.data.success) {
+        message.success(response.data.message);
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      console.log(err);
+    }
+  };
   useEffect(() => {
     getBus();
   }, []);
@@ -37,7 +57,7 @@ function BookNow() {
   return (
     <div>
       {bus && (
-        <Row>
+        <Row gutter={20}>
           <Col lg={12} sm={24}>
             <h1 className="text-uppercase text-primary">{bus.busName}</h1>
             <hr />
@@ -47,9 +67,39 @@ function BookNow() {
             <div className="text-2x">Departure - {bus.departure}</div>
             <div className="text-2x">Arrival - {bus.arrival}</div>
             <div className="text-2x">Price - {bus.price}</div>
+            <hr />
+            <div>
+              <h1 className="text-uppercase text-primary">Selected Seats</h1>
+              <hr />
+              <div className="text-2x">{selectedSeats.join(", ")}</div>
+            </div>
+            <hr />
+            <div>
+              <h1 className="text-uppercase text-primary">Price</h1>
+              <hr />
+              <div className="text-2x">{selectedSeats.length * bus.price}</div>
+            </div>
+            {/* book now button */}
+            <hr />
+            <div>
+              <button
+                className={`btn btn-primary btn-block ${selectedSeats.length === 0 && "btn-disabled"}}`}
+                onClick={() => {
+                  bookNow();
+
+                }}
+                disabled={selectedSeats.length === 0}
+              >
+                Book Now
+              </button>
+            </div>
           </Col>
           <Col lg={12} sm={24}>
-            <SeatSelection />
+            <SeatSelection
+              selectedSeats={selectedSeats}
+              setSelectedSeats={setSelectedSeats}
+              bus={bus}
+            />
           </Col>
         </Row>
       )}
