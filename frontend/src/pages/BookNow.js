@@ -6,6 +6,7 @@ import { hideLoading, showLoading } from "../redux/alertsSlice";
 import { useParams } from "react-router-dom";
 import SeatSelection from "../components/SeatSelection";
 import "../resources/bus.css";
+import StripeCheckout from "react-stripe-checkout";
 
 function BookNow() {
   const [bus, setBus] = React.useState([]);
@@ -50,6 +51,9 @@ function BookNow() {
       console.log(err);
     }
   };
+  const onToken = () => {
+    
+  }
   useEffect(() => {
     getBus();
   }, []);
@@ -82,16 +86,19 @@ function BookNow() {
             {/* book now button */}
             <hr />
             <div>
-              <button
-                className={`btn btn-primary btn-block ${selectedSeats.length === 0 && "btn-disabled"}}`}
-                onClick={() => {
-                  bookNow();
-
-                }}
-                disabled={selectedSeats.length === 0}
+              <StripeCheckout
+                token={onToken}
+                stripeKey="pk_test_51MSJ5DSAVoTBcwGh6ypswSlYBkAQAjfI75eFAe38mYqJAzYTC5N2CuvSiuSb4MuzzJ6Zd4GW4YQjlxkOGKodOR7b00uVNzC8Py"
               >
-                Book Now
-              </button>
+                <button
+                  className={`btn btn-primary btn-block ${
+                    selectedSeats.length === 0 && "btn-disabled"
+                  }}`}
+                  disabled={selectedSeats.length === 0}
+                >
+                  Book Now
+                </button>
+              </StripeCheckout>
             </div>
           </Col>
           <Col lg={12} sm={24}>
