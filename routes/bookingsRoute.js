@@ -3,17 +3,17 @@ const Booking = require("../models/bookingsModel");
 const authMiddleware = require("../middlewares/auth-Middleware");
 const Bus = require("../models/busModel");
 const stripe = require("stripe")(process.env.STRIPE_KEY)
-const uuid = require("uuid")
+const {v4:uuidv4} = require("uuid")
 
 // book seats
 router.post("/book-seats", authMiddleware, async (req, res) => {
   try {
     const newBooking = new Booking({
        ...req.body,
-       transactionId: "123456789",
        user: req.userId,
-       totalAmount: req.body.seats.length * 100,
+       status: "Success",
    });
+    console.log(newBooking);
     await newBooking.save();
     const bus = await Bus.findById(req.body.bus);
     bus.seatsBooked = [...bus.seatsBooked, ...req.body.seats];
@@ -41,13 +41,13 @@ router.post("/make-payment", authMiddleware, async (req, res) => {
             source: token.id
         })
 
-        const payment = await stripe.charges.create({
+        const payment = await stripe.paymentIntents.create({
             amount: amount,
             currency: "inr",
             customer: customer.id,
             receipt_email: token.email,
         }, {
-            idempotencyKey: uuid()
+            idempotencyKey: uuidv4()
         })
 
         if(payment){

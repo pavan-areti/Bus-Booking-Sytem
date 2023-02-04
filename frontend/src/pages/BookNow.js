@@ -33,27 +33,50 @@ function BookNow() {
     }
   };
 
-  const bookNow = async () => {
+  const bookNow = async (paymentDetails) => {
+    console.log(paymentDetails);
     try {
       dispatch(showLoading());
       const response = await axiosInstance.post("/api/bookings/book-seats", {
         bus: params.id,
         seats: selectedSeats,
+        transactionId: paymentDetails.id,
+        totalAmount: paymentDetails.amount/100,
       });
       dispatch(hideLoading());
       if (response.data.success) {
         message.success(response.data.message);
       } else {
+        console.log(response.data.message)
         message.error(response.data.message);
       }
+      dispatch(hideLoading());
     } catch (err) {
       dispatch(hideLoading());
       console.log(err);
     }
   };
-  const onToken = () => {
-    
-  }
+  const onToken = async (token) => {
+    try {
+      dispatch(showLoading());
+      const response = await axiosInstance.post("/api/bookings/make-payment", {
+        token,
+        amount: selectedSeats.length * bus.price * 100,
+      });
+
+      if (response.data.success) {
+        message.success(response.data.message);
+        bookNow(response.data.data);
+      } else {
+        console.log(response.data.message)
+        message.error(response.data.message);
+      }
+      dispatch(hideLoading());
+    } catch (err) {
+      dispatch(hideLoading());
+      console.log(err);
+    }
+  };
   useEffect(() => {
     getBus();
   }, []);
@@ -88,6 +111,9 @@ function BookNow() {
             <div>
               <StripeCheckout
                 token={onToken}
+                amount = {selectedSeats.length * bus.price * 100}
+                currency = "INR"
+                billingAddress
                 stripeKey="pk_test_51MSJ5DSAVoTBcwGh6ypswSlYBkAQAjfI75eFAe38mYqJAzYTC5N2CuvSiuSb4MuzzJ6Zd4GW4YQjlxkOGKodOR7b00uVNzC8Py"
               >
                 <button
