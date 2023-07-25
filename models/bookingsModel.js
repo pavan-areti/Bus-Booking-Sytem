@@ -4,7 +4,7 @@ const bookingSchema = new mongoose.Schema(
   {
     bus: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Bus",
+      ref: "Buses",
       required: true,
     },
     user: {
@@ -35,6 +35,6 @@ const bookingSchema = new mongoose.Schema(
   }
 );
 
-const Bus = mongoose.model("Bookings", bookingSchema);
+const Booking = mongoose.model("Bookings", bookingSchema);
 
-module.exports = Bus;
+module.exports = Booking;

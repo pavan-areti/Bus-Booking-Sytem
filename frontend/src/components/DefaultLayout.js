@@ -61,7 +61,7 @@ function DefaultLayout({ children }) {
   const menuToRender =  user?.isAdmin ? adminMenu :userMenu;
   
   const currentUrl = window.location.pathname;
-  console.log(currentUrl);
+
   return (
     <div className="layout-parent">
       {!collapsed && (

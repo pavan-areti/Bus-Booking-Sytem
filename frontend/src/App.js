@@ -11,6 +11,8 @@ import AdminHome from "./pages/Admin/AdminHome";
 import AdminBuses from "./pages/Admin/AdminBuses";
 import AdminUsers from "./pages/Admin/AdminUsers";
 import BookNow from "./pages/BookNow";
+import './App.css'
+import Bookings from "./pages/Bookings";
 
 const App = () => {
   const { loading } = useSelector((state) => state.alerts);
@@ -72,6 +74,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <AdminUsers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookings"
+            element={
+              <ProtectedRoute>
+                <Bookings />
               </ProtectedRoute>
             }
           />

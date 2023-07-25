@@ -1,11 +1,12 @@
 import { message, Table } from "antd";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import BusForm from "../../components/BusForm";
 import PageTitle from "../../components/PageTitle";
 import { axiosInstance } from "../../helpers/axiosInstance";
 import { hideLoading, showLoading } from "../../redux/alertsSlice";
-import moment from "moment";
+// import moment from "moment";
+
 function AdminBuses() {
   const dispatch = useDispatch();
   const [showBusForm, setShowBusForm] = React.useState(false);
@@ -70,7 +71,7 @@ function AdminBuses() {
     },
   ];
   //get buses
-  const getBuses = async () => {
+  const getBuses = useCallback(async () => {
     try {
       dispatch(showLoading());
       const response = await axiosInstance.post("/api/buses/get-buses", {});
@@ -84,7 +85,7 @@ function AdminBuses() {
       dispatch(hideLoading());
       console.log(err);
     }
-  };
+  }, [dispatch]);
 
   //delete bus
   const deleteBus = async (id) => {
@@ -108,7 +109,7 @@ function AdminBuses() {
 
   useEffect(() => {
     getBuses();
-  }, []);
+  }, [getBuses]);
   return (
     <div>
       <div className="d-flex justify-content-between">

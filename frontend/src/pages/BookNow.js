@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { Col, message, Row } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../helpers/axiosInstance";
@@ -13,8 +13,9 @@ function BookNow() {
   const [selectedSeats, setSelectedSeats] = React.useState([]);
   const dispatch = useDispatch();
   const params = useParams();
+  
   //get buses
-  const getBus = async () => {
+  const getBus = useCallback(async () => {
     try {
       dispatch(showLoading());
       const response = await axiosInstance.post("/api/buses/get-bus", {
@@ -31,25 +32,28 @@ function BookNow() {
       dispatch(hideLoading());
       console.log(err);
     }
-  };
+  }, [dispatch, params.id]);
 
   const bookNow = async (paymentDetails) => {
-    console.log(paymentDetails);
     try {
       dispatch(showLoading());
       const response = await axiosInstance.post("/api/bookings/book-seats", {
         bus: params.id,
         seats: selectedSeats,
         transactionId: paymentDetails.id,
-        totalAmount: paymentDetails.amount/100,
+        totalAmount: paymentDetails.amount / 100,
       });
       dispatch(hideLoading());
+
       if (response.data.success) {
+        setSelectedSeats([]);
         message.success(response.data.message);
+        getBus();
       } else {
-        console.log(response.data.message)
+        console.log(response.data.message);
         message.error(response.data.message);
       }
+
       dispatch(hideLoading());
     } catch (err) {
       dispatch(hideLoading());
@@ -68,7 +72,7 @@ function BookNow() {
         message.success(response.data.message);
         bookNow(response.data.data);
       } else {
-        console.log(response.data.message)
+        console.log(response.data.message);
         message.error(response.data.message);
       }
       dispatch(hideLoading());
@@ -77,9 +81,10 @@ function BookNow() {
       console.log(err);
     }
   };
+
   useEffect(() => {
     getBus();
-  }, []);
+  }, [getBus]);
 
   return (
     <div>
@@ -111,8 +116,8 @@ function BookNow() {
             <div>
               <StripeCheckout
                 token={onToken}
-                amount = {selectedSeats.length * bus.price * 100}
-                currency = "INR"
+                amount={selectedSeats.length * bus.price * 100}
+                currency="INR"
                 billingAddress
                 stripeKey="pk_test_51MSJ5DSAVoTBcwGh6ypswSlYBkAQAjfI75eFAe38mYqJAzYTC5N2CuvSiuSb4MuzzJ6Zd4GW4YQjlxkOGKodOR7b00uVNzC8Py"
               >
