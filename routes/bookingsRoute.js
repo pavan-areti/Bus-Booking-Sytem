@@ -13,7 +13,7 @@ router.post("/book-seats", authMiddleware, async (req, res) => {
       user: req.userId,
       status: "Success",
     });
-    console.log(newBooking);
+
     await newBooking.save();
     const bus = await Bus.findById(req.body.bus);
     bus.seatsBooked = [...bus.seatsBooked, ...req.body.seats];
@@ -44,9 +44,7 @@ router.post("/cancel-booking", authMiddleware, async (req, res) => {
       let ind = bus.seatsBooked.indexOf(booking.seats[i]);
       bus.seatsBooked.splice(ind, 1);
     }
-    console.log(bus.seatsBooked);
     await bus.save();
-    console.log(bus.seatsBooked);
 
     await Booking.findByIdAndDelete(bookingId);
 
@@ -87,8 +85,6 @@ router.post("/user-bookings", authMiddleware, async (req, res) => {
 router.post("/make-payment", authMiddleware, async (req, res) => {
   try {
     const { token, amount } = req.body;
-
-    console.log("payment", token);
 
     const customer = await stripe.customers.create({
       email: token.email,

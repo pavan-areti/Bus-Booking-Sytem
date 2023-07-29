@@ -6,36 +6,6 @@ import { Table, message } from "antd";
 const Bookings = () => {
   const { user } = useSelector((state) => state.users);
   const [bookings, setBookings] = useState([]);
-  // bus
-  // :
-  // {_id: '63c6394dd54265a53c911c27', busNumber: '765', busName: 'asdfer', busCapacity: 40, from: 'Bhimavaram, Andhra Pradesh', …}
-  // createdAt
-  // :
-  // "2023-01-19T12:57:25.963Z"
-  // seats
-  // :
-  // (2) [1, 2]
-  // status
-  // :
-  // "Pending"
-  // totalAmount
-  // :
-  // 200
-  // transactionId
-  // :
-  // "123456789"
-  // updatedAt
-  // :
-  // "2023-01-19T12:57:25.963Z"
-  // user
-  // :
-  // "63c6348666136bd78dad526d"
-  // __v
-  // :
-  // 0
-  // _id
-  // :
-  // "63c93e35c06b964dda656d2b"
 
   const CancelBooking = async (id) => {
     try {

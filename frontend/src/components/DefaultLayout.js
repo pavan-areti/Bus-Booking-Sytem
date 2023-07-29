@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../resources/layout.css";
 
 function DefaultLayout({ children }) {
-  const {user} = useSelector((state) => state.users);
+  const { user } = useSelector((state) => state.users);
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const userMenu = [
@@ -58,8 +57,8 @@ function DefaultLayout({ children }) {
     },
   ];
 
-  const menuToRender =  user?.isAdmin ? adminMenu :userMenu;
-  
+  const menuToRender = user?.isAdmin ? adminMenu : userMenu;
+
   const currentUrl = window.location.pathname;
 
   return (
@@ -68,17 +67,25 @@ function DefaultLayout({ children }) {
         <div className="side-bar">
           <div className="side-bar-header m-5">
             <h1 className="logo pt-3 mt-3 text-center text-white">BB</h1>
-            <h3 className="text-center text-white">{user?.isAdmin?`${user?.name}(Admin)`:`${user?.name}`}</h3>
-          </div>  
+            <h3 className="text-center text-white">
+              {user?.isAdmin ? `${user?.name}(Admin)` : `${user?.name}`}
+            </h3>
+          </div>
           <div className="d-flex flex-column gap-2">
-            {menuToRender.map((item) => (
+            {menuToRender.map((item, i) => (
               <div
                 className={`menu-item ${
                   item.path === currentUrl && "active-menu-item"
                 }`}
                 onClick={() => {
-                  navigate(item.path);
+                  if (item.path === "/logout") {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                  } else {
+                    navigate(item.path);
+                  }
                 }}
+                key={i}
               >
                 <div className="menu-icon">
                   <i className={item.icon}></i>

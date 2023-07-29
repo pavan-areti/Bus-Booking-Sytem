@@ -36,8 +36,8 @@ function Home() {
       <div className=""></div>
       <div className="">
         <Row>
-          {buses.map((bus) => (
-            <Col lg={12} xs={24} sm={24}>
+          {buses.map((bus, i) => (
+            <Col key={i} lg={12} xs={24} sm={24}>
               <Bus bus={bus} />
             </Col>
           ))}

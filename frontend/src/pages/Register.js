@@ -12,7 +12,7 @@ const Register = () => {
     if(localStorage.getItem("token")){
       navigate("/");
     }
-  }, [])
+  }, [navigate])
   
   const onFinish = async (values) => {
     try {

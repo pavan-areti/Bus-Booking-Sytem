@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import { Button, Checkbox, Form, Input, message } from "antd";
+import React, { useEffect } from "react";
+import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -9,10 +9,10 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    if(localStorage.getItem("token")){
+    if (localStorage.getItem("token")) {
       navigate("/");
     }
-  }, [])
+  }, [navigate]);
   const onFinish = async (values) => {
     try {
       dispatch(showLoading());
