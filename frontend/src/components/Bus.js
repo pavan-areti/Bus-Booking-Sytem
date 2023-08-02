@@ -1,34 +1,33 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { styled } from "styled-components";
+import { Button } from "./UI/Button";
+import { Card, CardBody, CardHeading, CartData, CardItem } from "./UI/Card";
 
 function Bus({ bus }) {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
   return (
-    <div className="card m-2 ">
-      <div className="card-body">
-        <h5 className="card-title text-uppercase text-2x">{bus.busName}</h5>
-        <p className="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-      </div>
-      <ul className="list-group list-group-flush">
-        <li className="list-group-item">From : {bus.from}</li>
-        <li className="list-group-item">To: {bus.to}</li>
-        <li className="list-group-item">Price: {bus.price}</li>
-        <li className="list-group-item">Date: {bus.date}</li>
-        <li className="list-group-item">Arrival: {bus.arrival}</li>
-        <li className="list-group-item">Departure: {bus.departure}</li>
-        <li className="list-group-item">Type: {bus.type}</li>
-      </ul>
-      <div className="card-body">
-        <a href="#" className="card-link text-2x" onClick={()=>{
+    <Card className="m-2">
+      <CardHeading>{bus.busName}</CardHeading>
+      <CartData>
+        <CardItem>From : {bus.from}</CardItem>
+        <CardItem>To: {bus.to}</CardItem>
+        <CardItem>Price: {bus.price}</CardItem>
+        <CardItem>Date: {bus.date}</CardItem>
+        <CardItem>Arrival: {bus.arrival}</CardItem>
+        <CardItem>Departure: {bus.departure}</CardItem>
+        <CardItem>Type: {bus.type}</CardItem>
+      </CartData>
+
+        <Button
+          className="text-2x mt-4"
+          onClick={() => {
             navigate(`/book/${bus._id}`);
-        }}>
+          }}
+        >
           Book Now
-        </a>
-      </div>
-    </div>
+        </Button>
+    </Card>
   );
 }
 

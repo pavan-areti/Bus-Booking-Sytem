@@ -16,7 +16,7 @@ const SeatSelection = ({ selectedSeats, setSelectedSeats, bus }) => {
     <div>
       <div className="bus-container">
         <Row gutter={[10, 10]}>
-          {Array.from(Array(capacity).keys()).map((seat) => {
+          {Array.from(Array(capacity).keys()).map((seat,i) => {
             let seatclass = '';
             if (selectedSeats.includes(seat + 1)) {
                 seatclass = 'selected-seat';

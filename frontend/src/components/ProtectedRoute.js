@@ -12,44 +12,28 @@ function ProtectedRoute({ children }) {
   const { user } = useSelector((state) => state.users);
   const navigate = useNavigate();
 
-  const validateToken = useCallback(
-    async (token) => {
-      try {
-        dispatch(showLoading());
-        const res = await axios.post(
-          "/api/users/get-user-by-id",
-          {},
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        dispatch(hideLoading());
-        if (res.data.success) {
-          dispatch(setUser(res.data.data));
-        } else {
-          localStorage.removeItem("token");
-          message.error(res.data.message);
-          navigate("/login");
-        }
-      } catch (err) {
-        console.log(err);
+  const validateToken = useCallback(async () => {
+    try {
+      dispatch(showLoading());
+      const res = await axios.post("/api/users/is-auth", {});
+      dispatch(hideLoading());
+      if (res.data.success) {
+        message.success("authentication succesfull");
+        dispatch(setUser(res.data.data));
+      } else {
+        message.error(res.data.message);
         navigate("/login");
       }
-    },
-    [dispatch, navigate]
-  );
+    } catch (err) {
+      message.error(err.message);
+      navigate("/login");
+    }
+  }, [dispatch, navigate]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    } else {
-      validateToken(token);
-    }
-  }, [navigate, validateToken]);
+    validateToken();
+  }, [validateToken]);
+
   return <>{user && <DefaultLayout>{children}</DefaultLayout>}</>;
 }
 
