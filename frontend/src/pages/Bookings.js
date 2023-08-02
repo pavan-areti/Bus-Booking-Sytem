@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../helpers/axiosInstance";
 import { useSelector } from "react-redux";
 import { Table, message } from "antd";
+import axios from "axios";
 
 const Bookings = () => {
   const { user } = useSelector((state) => state.users);
@@ -9,7 +10,7 @@ const Bookings = () => {
 
   const CancelBooking = async (id) => {
     try {
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         "/api/bookings/cancel-booking",
         {
           bookingId: id,
@@ -29,11 +30,11 @@ const Bookings = () => {
 
   const dataSource = bookings.map((booking) => {
     return {
-      busName: booking.bus.busName,
-      busNumber: booking.bus.busNumber,
-      date: booking.bus.date,
-      to: booking.bus.to,
-      from: booking.bus.from,
+      busName: booking.bus?.busName,
+      busNumber: booking.bus?.busNumber,
+      date: booking.bus?.date,
+      to: booking.bus?.to,
+      from: booking.bus?.from,
       seats: booking.seats,
       _id: booking._id,
     };
@@ -90,7 +91,7 @@ const Bookings = () => {
   ];
 
   const getUserBookings = useCallback(async () => {
-    const res = await axiosInstance.post("/api/bookings/user-bookings", {
+    const res = await axios.post("/api/bookings/user-bookings", {
       user: user,
     });
     setBookings(res.data.data);

@@ -37,7 +37,7 @@ function Home() {
       <div className="">
         <Row>
           {buses.map((bus, i) => (
-            <Col key={i} lg={12} xs={24} sm={24}>
+            <Col key={i} lg={8} xs={24} sm={24} className="d-flex">
               <Bus bus={bus} />
             </Col>
           ))}
