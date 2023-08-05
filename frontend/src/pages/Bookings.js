@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { axiosInstance } from "../helpers/axiosInstance";
+// import { axiosInstance } from "../helpers/axiosInstance";
 import { useSelector } from "react-redux";
-import { Col, Row, Table, message } from "antd";
+import { Col, Row, message } from "antd";
 import axios from "axios";
 import { BookingCard } from "../components/UI/BookingCard";
 
 const Bookings = () => {
   const { user } = useSelector((state) => state.users);
-
-  console.log(user);
 
   const [bookings, setBookings] = useState([]);
 
@@ -45,55 +43,55 @@ const Bookings = () => {
     };
   });
 
-  const columns = [
-    {
-      title: "Bus Name",
-      dataIndex: "busName",
-    },
-    {
-      title: "Bus Number",
-      dataIndex: "busNumber",
-    },
-    {
-      title: "Travel Date",
-      dataIndex: "date",
-    },
-    {
-      title: "Departure",
-      dataIndex: "from",
-    },
-    {
-      title: "Arrival",
-      dataIndex: "to",
-    },
-    {
-      title: "seats",
-      dataIndex: "seats",
-      render: (seats) => {
-        return seats.map((seat) => {
-          return <> {seat},</>;
-        });
-      },
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (action, record) => {
-        return (
-          <div className="d-flex flex-row gap-4">
-            <i
-              className="ri-delete-bin-line "
-              role="button"
-              onClick={() => {
-                // CancelBooking(record._id);
-              }}
-            ></i>
-            <i className="ri-eye-line" role="button" onClick={() => {}}></i>
-          </div>
-        );
-      },
-    },
-  ];
+  // const columns = [
+  //   {
+  //     title: "Bus Name",
+  //     dataIndex: "busName",
+  //   },
+  //   {
+  //     title: "Bus Number",
+  //     dataIndex: "busNumber",
+  //   },
+  //   {
+  //     title: "Travel Date",
+  //     dataIndex: "date",
+  //   },
+  //   {
+  //     title: "Departure",
+  //     dataIndex: "from",
+  //   },
+  //   {
+  //     title: "Arrival",
+  //     dataIndex: "to",
+  //   },
+  //   {
+  //     title: "seats",
+  //     dataIndex: "seats",
+  //     render: (seats) => {
+  //       return seats.map((seat) => {
+  //         return <> {seat},</>;
+  //       });
+  //     },
+  //   },
+  //   {
+  //     title: "Action",
+  //     dataIndex: "action",
+  //     render: (action, record) => {
+  //       return (
+  //         <div className="d-flex flex-row gap-4">
+  //           <i
+  //             className="ri-delete-bin-line "
+  //             role="button"
+  //             onClick={() => {
+  //               // CancelBooking(record._id);
+  //             }}
+  //           ></i>
+  //           <i className="ri-eye-line" role="button" onClick={() => {}}></i>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
 
   const getUserBookings = useCallback(async () => {
     const res = await axios.post("/api/bookings/user-bookings", {
@@ -108,7 +106,6 @@ const Bookings = () => {
 
   return (
     <div>
-      {/* <Table dataSource={dataSource} columns={columns} /> */}
       <Row>
         {dataSource.map((data, i) => (
           <Col key={i} lg={8} xs={24} sm={24} className="d-flex">
