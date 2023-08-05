@@ -56,7 +56,6 @@ passport.use(
       profileFields: ["id", "displayName", "photos", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
-      // console.log(profile);
       try {
         const id = profile.id;
         const email = profile.emails[0].value;
@@ -68,6 +67,7 @@ passport.use(
           { id, email, firstName, lastName, profilePhoto, source },
           function (err, user) {
             if (err) {
+              console.log(err);
               return done(null, false, {
                 message: `You have previously signed up with a different signin method`,
               });
@@ -160,6 +160,51 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/get-users", authMiddleware, async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user.isAdmin) {
+      throw { message: "only admins can access this page" };
+    }
+
+    const users = await User.find({});
+
+    res.send({
+      message: "users fetched succesfully",
+      success: true,
+      data: users,
+    });
+  } catch (err) {
+    res.send({
+      message: err.message,
+      success: false,
+      data: null,
+    });
+  }
+});
+
+router.post("/update-access", authMiddleware, async (req, res) => {
+  try {
+    const { data } = req.body;
+
+    for (const userId in data) {
+      const updates = data[userId];
+      await User.findByIdAndUpdate({_id:userId}, updates);
+    }
+
+    res.send({
+      message: "updated succesfully",
+      success: true,
+      data: null,
+    });
+  } catch (err) {
+    res.send({
+      message: err.message,
+      success: false,
+      data: null,
+    });
+  }
+});
 router.post("/get-user-by-id", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -239,7 +284,7 @@ router.get(
   passport.authenticate("facebook", {
     scope: ["public_profile", "email"],
   }),
-   (req, res) => {
+  (req, res) => {
     console.log(res);
   }
 );
@@ -247,10 +292,11 @@ router.get(
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
+    successReturnToOrRedirect: "http://localhost:3000/",
     failureRedirect: "http://localhost:3000/",
     successRedirect: "/",
-  })
-  , (req, res) => {
+  }),
+  (req, res) => {
     console.log(res);
   }
 );

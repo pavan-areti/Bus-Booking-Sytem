@@ -13,7 +13,7 @@ function BookNow() {
   const [selectedSeats, setSelectedSeats] = React.useState([]);
   const dispatch = useDispatch();
   const params = useParams();
-  
+  console.log(params);
   //get buses
   const getBus = useCallback(async () => {
     try {

@@ -4,7 +4,6 @@ import Form from "antd/es/form/Form";
 import { axiosInstance } from "../helpers/axiosInstance";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
-import moment from "moment";
 
 function BusForm({
   showBusForm,
@@ -56,7 +55,12 @@ function BusForm({
         }}
         footer={null}
       >
-        <Form layout="vertical" className="mt-3" onFinish={onFinish} initialValues={selectedBus}>
+        <Form
+          layout="vertical"
+          className="mt-3"
+          onFinish={onFinish}
+          initialValues={selectedBus}
+        >
           <Row gutter={[10, 10]}>
             <Col lg={24} xs={24}>
               <Form.Item label="Bus Name" name="busName">
@@ -112,7 +116,7 @@ function BusForm({
 
           <div className="d-flex justify-content-end">
             <button className="btn btn-primary" type="submit">
-              Add Bus
+              {type === "add" ? "Add Bus" : "Edit Bus"}
             </button>
           </div>
         </Form>

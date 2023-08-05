@@ -5,6 +5,7 @@ Large	lg	≥992px */
 
 :root {
   --color-primary: rgb(108, 14, 255);
+  --color-secondary: #e94560;
   --color-grey-light: rgb(35, 39, 47);
   --color-white: rgb(255, 255, 255);
   --color-grey-dark: rgb(22, 24, 29);
@@ -16,14 +17,13 @@ Large	lg	≥992px */
 *,
 *::after,
 *::before {
-  box-sizing: border-box !important;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 html {
   font-size: 62.5%;
-
   @media only screen and (max-width: 992px) {
     font-size: 50%;
   }

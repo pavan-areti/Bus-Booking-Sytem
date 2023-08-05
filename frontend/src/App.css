@@ -1,0 +1,37 @@
+/* X-Small	None	<576px
+Small	sm	≥576px
+Medium	md	≥768px
+Large	lg	≥992px */
+
+:root {
+  --color-primary: rgb(108, 14, 255);
+  --color-secondary: #e94560;
+  --color-grey-light: rgb(35, 39, 47);
+  --color-white: rgb(255, 255, 255);
+  --color-grey-dark: rgb(22, 24, 29);
+
+  --screen-medium: 992px;
+  --screen-small: 768px;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+  @media only screen and (max-width: 992px) {
+    font-size: 50%;
+  }
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  background-color: rgb(249, 241, 241);
+  color: white;
+}

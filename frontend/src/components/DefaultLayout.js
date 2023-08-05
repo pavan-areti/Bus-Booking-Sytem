@@ -8,8 +8,9 @@ import axios from "axios";
 
 function DefaultLayout({ children }) {
   const { user } = useSelector((state) => state.users);
+  console.log(user);
+
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false);
 
   const logout = async () => {
     const res = await axios.post("/api/users/logout", {});
@@ -69,17 +70,26 @@ function DefaultLayout({ children }) {
   const menuToRender = user?.isAdmin ? adminMenu : userMenu;
 
   const currentUrl = window.location.pathname;
-  console.log(user);
   return (
     <div className="layout-parent">
-      {!collapsed && (
+      {
         <div className="nav-bar">
           <div className="nav-bar-logo" onClick={() => navigate("/")}>
             LOGO
           </div>
           <form className="nav-bar-search">
-            <input type="text" size="10" placeholder="From" className="search-input" />
-            <input type="text" size="10" placeholder="To" className="search-input" />
+            <input
+              type="text"
+              size="10"
+              placeholder="From"
+              className="search-input"
+            />
+            <input
+              type="text"
+              size="10"
+              placeholder="To"
+              className="search-input"
+            />
             <input type="date" className="search-input" />
             <button className="search-button">
               <i class="ri-search-line"></i>
@@ -125,7 +135,7 @@ function DefaultLayout({ children }) {
             </p>
           </div>
         </div>
-      )}
+      }
       <div className="body">
         <div className="content">{children}</div>
       </div>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
 import { axiosInstance } from "../helpers/axiosInstance";
 import styled from "styled-components";
@@ -57,11 +57,8 @@ const Matter = styled.div`
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/");
-    }
-  }, [navigate]);
+
+
   const onFinish = async (values) => {
     try {
       dispatch(showLoading());
@@ -117,18 +114,12 @@ const Login = () => {
               <Form.Item label="Password" name="password">
                 <Input.Password />
               </Form.Item>
-              {/* <Link to="/register" className="btn-primary">
-                Register
-              </Link>
-              <button className="btn-primary" type="submit">
-                Login
-              </button> */}
               <Form.Item>
                 <div className="d-flex flex-column  justify-content-center">
                   <a
                     href="http://localhost:5000/api/users/login/federated/google"
                     className="btn btn-primary d-flex justify-content-center gap-3"
-                    style={{ textAlign: "center",background: "#E94560" }}
+                    style={{ textAlign: "center", background: "#E94560" }}
                   >
                     <i
                       className="ri-google-fill"
@@ -143,7 +134,7 @@ const Login = () => {
                   <a
                     href="http://localhost:5000/api/users/login/federated/facebook"
                     className="btn btn-primary d-flex justify-content-center gap-3"
-                    style={{ textAlign: "center",background:"#3A1078" }}
+                    style={{ textAlign: "center", background: "#3A1078" }}
                   >
                     <i
                       className="ri-facebook-fill"

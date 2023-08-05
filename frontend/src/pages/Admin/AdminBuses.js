@@ -128,6 +128,7 @@ function AdminBuses() {
         columns={columns}
         dataSource={buses}
         pagination={{ pageSize: 5 }}
+        className="mt-5"
       />
 
       {showBusForm && (

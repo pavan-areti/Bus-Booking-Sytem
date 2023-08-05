@@ -65,7 +65,6 @@ router.post("/cancel-booking", authMiddleware, async (req, res) => {
 router.post("/user-bookings", authMiddleware, async (req, res) => {
   try {
     const { user } = req.body;
-    // const user = User.findById(userId);
     const bookings = await Booking.find({ user }).populate("bus").exec();
 
     res.send({
