@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { Col, message, Row } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { axiosInstance } from "../helpers/axiosInstance";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
 import { useParams } from "react-router-dom";
@@ -13,7 +13,7 @@ function BookNow() {
   const [selectedSeats, setSelectedSeats] = React.useState([]);
   const dispatch = useDispatch();
   const params = useParams();
-  console.log(params);
+
   //get buses
   const getBus = useCallback(async () => {
     try {
@@ -50,7 +50,6 @@ function BookNow() {
         message.success(response.data.message);
         getBus();
       } else {
-        console.log(response.data.message);
         message.error(response.data.message);
       }
 
@@ -72,7 +71,6 @@ function BookNow() {
         message.success(response.data.message);
         bookNow(response.data.data);
       } else {
-        console.log(response.data.message);
         message.error(response.data.message);
       }
       dispatch(hideLoading());

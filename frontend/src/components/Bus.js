@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
+// import { styled } from "styled-components";
 import { Button } from "./UI/Button";
-import { Card, CardBody, CardHeading, CardData, CardItem } from "./UI/Card";
+import { Card, CardHeading, CardData, CardItem } from "./UI/Card";
 
 function Bus({ bus }) {
   const navigate = useNavigate();

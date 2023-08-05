@@ -1,5 +1,5 @@
 import React,{useEffect} from "react";
-import { Button, Checkbox, Form, Input,message } from "antd";
+import { Form, Input,message } from "antd";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
@@ -21,7 +21,6 @@ const Register = () => {
         "/api/users/register",
         values
       );
-      console.log(res);
       dispatch(hideLoading());
       if(res.data.success){
         message.success(res.data.message);

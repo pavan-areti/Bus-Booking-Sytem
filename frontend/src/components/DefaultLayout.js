@@ -2,19 +2,35 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../resources/layout.css";
-import { axiosInstance } from "../helpers/axiosInstance";
+// import { axiosInstance } from "../helpers/axiosInstance";
 import { message } from "antd";
 import axios from "axios";
+import SearchAutosuggest from "./SearchAutoSuggest";
 
 function DefaultLayout({ children }) {
   const { user } = useSelector((state) => state.users);
-  console.log(user);
+  const [to, setTo] = useState("");
+  const [from, setFrom] = useState("");
+  const [date, setDate] = useState("");
+  const { buses } = useSelector((state) => state.buses);
+
+  const fromlist = buses.map((bus) => bus.from);
+  const tolist = buses.map((bus) => bus.to);
 
   const navigate = useNavigate();
 
   const logout = async () => {
     const res = await axios.post("/api/users/logout", {});
     message.success(res.data.message);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const newSearchParams = new URLSearchParams();
+    if (from) newSearchParams.set("from", from);
+    if (to) newSearchParams.set("to", to);
+    if (date) newSearchParams.set("date", date);
+    navigate({ pathname: "/", search: newSearchParams.toString() });
   };
 
   const userMenu = [
@@ -70,6 +86,19 @@ function DefaultLayout({ children }) {
   const menuToRender = user?.isAdmin ? adminMenu : userMenu;
 
   const currentUrl = window.location.pathname;
+
+  const handleFromSuggestionSelected = (event, { suggestionValue }) => {
+    setFrom(suggestionValue);
+  };
+
+  const handleToSuggestionSelected = (event, { suggestionValue }) => {
+    setTo(suggestionValue);
+  };
+
+  const handleDateChange = (value) => {
+    setDate(value);
+  };
+
   return (
     <div className="layout-parent">
       {
@@ -77,20 +106,28 @@ function DefaultLayout({ children }) {
           <div className="nav-bar-logo" onClick={() => navigate("/")}>
             LOGO
           </div>
-          <form className="nav-bar-search">
-            <input
-              type="text"
-              size="10"
+          <form className="nav-bar-search" onSubmit={handleSearch}>
+            <SearchAutosuggest
+              suggestions={fromlist}
+              onSuggestionSelected={handleFromSuggestionSelected}
               placeholder="From"
-              className="search-input"
+              setValue={setFrom}
+              value={from}
+            />
+            <SearchAutosuggest
+              suggestions={tolist}
+              onSuggestionSelected={handleToSuggestionSelected}
+              placeholder="To"
+              setValue={setTo}
+              value={to}
             />
             <input
-              type="text"
-              size="10"
-              placeholder="To"
+              type="date"
+              onChange={(e) => {
+                handleDateChange(e.target.value);
+              }}
               className="search-input"
             />
-            <input type="date" className="search-input" />
             <button className="search-button">
               <i class="ri-search-line"></i>
             </button>
