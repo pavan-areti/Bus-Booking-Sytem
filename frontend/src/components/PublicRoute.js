@@ -2,7 +2,7 @@ import React from 'react'
 
 function PublicRoute({children}) {
   return (
-    <div>{children}</div>
+    <div className='body'>{children}</div>
   )
 }
 

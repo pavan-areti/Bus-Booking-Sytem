@@ -13,6 +13,7 @@ import AdminUsers from "./pages/Admin/AdminUsers";
 import BookNow from "./pages/BookNow";
 import "./App.css";
 import Bookings from "./pages/Bookings";
+import ScrollControlledVideo from "./pages/ScrollControlledVideo";
 
 const App = () => {
   const { loading } = useSelector((state) => state.alerts);
@@ -42,6 +43,14 @@ const App = () => {
             element={
               <PublicRoute>
                 <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/details"
+            element={
+              <PublicRoute>
+                <ScrollControlledVideo />
               </PublicRoute>
             }
           />

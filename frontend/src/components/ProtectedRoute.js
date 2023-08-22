@@ -34,7 +34,10 @@ function ProtectedRoute({ children }) {
     validateToken();
   }, [validateToken]);
 
-  return <>{user && <DefaultLayout>{children}</DefaultLayout>}</>;
+  return <>{
+    user &&
+    <DefaultLayout>{children}</DefaultLayout>
+  }</>;
 }
 
 export default ProtectedRoute;
