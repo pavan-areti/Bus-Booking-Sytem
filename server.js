@@ -5,6 +5,7 @@ var cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 
+require("dotenv").config();
 //everything related to passport
 app.use(passport.initialize());
 app.use(
@@ -17,7 +18,6 @@ app.use(
 app.use(passport.authenticate("session"));
 app.use(passport.session());
 
-require("dotenv").config();
 const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
 

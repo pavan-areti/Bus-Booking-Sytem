@@ -20,7 +20,6 @@ export const TiltCard = styled.div`
 `;
 
 export const AboveLayer = styled.div`
-  pointer-events: none;
   width: 33.333%;
   height: 33.333%;
   position: absolute;
