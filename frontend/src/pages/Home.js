@@ -1,17 +1,16 @@
 import { Col, message, Row } from "antd";
 import React, { useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import Bus from "../components/Bus";
 import { axiosInstance } from "../helpers/axiosInstance";
-import { hideLoading, showLoading } from "../redux/alertsSlice";
-import { setBusesInStore } from "../redux/busesSlice";
 import { useLocation } from "react-router-dom";
+import useStore from "../stores/store";
 
 function Home() {
   // const { user } = useSelector((state) => state.users);
+  const {showLoading,hideLoading} = useStore((state)=>state.alertsSlice)
+  const {setBusesInStore} = useStore((state)=>state.busesSlice)
   const [buses, setBuses] = React.useState([]);
   const location = useLocation();
-  const dispatch = useDispatch();
   
   const searchParams = new URLSearchParams(location.search);
   const from = searchParams.get('from') || '';
@@ -21,20 +20,20 @@ function Home() {
   //get buses
   const getBuses = useCallback(async () => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axiosInstance.post("/api/buses/get-buses", {});
-      dispatch(hideLoading());
+      hideLoading();
       if (response.data.success) {
         setBuses(response.data.data);
-        dispatch(setBusesInStore(response.data.data));
+        setBusesInStore(response.data.data);
       } else {
         message.error(response.data.message);
       }
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       console.log(err);
     }
-  }, [dispatch]);
+  }, [hideLoading, setBusesInStore, showLoading]);
 
   useEffect(() => {
     getBuses();
@@ -52,7 +51,7 @@ function Home() {
     );
   });
 
-
+  console.log(filteredBuses)
   return (
     <div>
       <div className=""></div>

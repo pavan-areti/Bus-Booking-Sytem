@@ -2,13 +2,12 @@ import React from "react";
 import { Form, Input, message } from "antd";
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../redux/alertsSlice";
 // import { axiosInstance } from "../helpers/axiosInstance";
 import styled from "styled-components";
 import { Heading1 } from "../components/Typography/Heading1";
 import { Heading2 } from "../components/Typography/Heading2";
 import { Para } from "../components/Typography/Para";
+import useStore from "../stores/store";
 
 const Heading = styled(Heading1)`
   margin-bottom: 2rem;
@@ -56,14 +55,13 @@ const Matter = styled.div`
 `;
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
+  const {showLoading,hideLoading} = useStore((state)=>state.alertsSlice)
 
   const onFinish = async (values) => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const res = await axios.post("/api/users/login", values);
-      dispatch(hideLoading());
+      hideLoading();
       if (res.data.success) {
         message.success(res.data.message);
         localStorage.setItem("token", res.data.data);
@@ -72,7 +70,7 @@ const Login = () => {
         message.error(res.data.message);
       }
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       message.error(err.message);
     }
   };

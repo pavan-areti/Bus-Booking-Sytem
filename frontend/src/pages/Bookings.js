@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 // import { axiosInstance } from "../helpers/axiosInstance";
-import { useSelector } from "react-redux";
 import { Col, Row, message } from "antd";
 import axios from "axios";
 import { BookingCard } from "../components/UI/BookingCard";
 import { RadioButton, RadioList } from "../components/UI/RadioList";
+import useStore from "../stores/store";
 
 const Bookings = () => {
   const [filter, setFilter] = useState("all");
-  const { user } = useSelector((state) => state.users);
+  const { user } = useStore((state) => state.usersSlice);
 
   const [bookings, setBookings] = useState([]);
 

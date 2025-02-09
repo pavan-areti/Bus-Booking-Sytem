@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../resources/layout.css";
-// import { axiosInstance } from "../helpers/axiosInstance";
+import useStore from "../stores/store.js"
 import { message } from "antd";
 import axios from "axios";
 import SearchAutosuggest from "./SearchAutoSuggest";
 
 function DefaultLayout({ children }) {
-  const { user } = useSelector((state) => state.users);
+  const { user } = useStore((state) => state.usersSlice);
+  const { buses } = useStore((state) => state.busesSlice);
   const [to, setTo] = useState("");
   const [from, setFrom] = useState("");
   const [date, setDate] = useState("");
-  const { buses } = useSelector((state) => state.buses);
 
   const fromlist = buses.map((bus) => bus.from);
   const tolist = buses.map((bus) => bus.to);

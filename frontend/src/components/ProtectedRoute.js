@@ -2,24 +2,22 @@ import React, { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../redux/usersSlice";
-import { hideLoading, showLoading } from "../redux/alertsSlice";
 import DefaultLayout from "./DefaultLayout";
+import useStore from "../stores/store";
 
 function ProtectedRoute({ children }) {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.users);
+  const { user,setUser } = useStore((state) => state.usersSlice);
+  const {showLoading,hideLoading} = useStore((state) => state.alertsSlice);
   const navigate = useNavigate();
 
   const validateToken = useCallback(async () => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const res = await axios.post("/api/users/is-auth", {});
-      dispatch(hideLoading());
+      hideLoading();
       if (res.data.success) {
         message.success("authentication succesfull");
-        dispatch(setUser(res.data.data));
+        setUser(res.data.data);
       } else {
         message.error(res.data.message);
         navigate("/login");
@@ -28,12 +26,13 @@ function ProtectedRoute({ children }) {
       message.error(err.message);
       navigate("/login");
     }
-  }, [dispatch, navigate]);
+  }, [hideLoading, navigate, setUser, showLoading]);
 
   useEffect(() => {
     validateToken();
   }, [validateToken]);
 
+  console.log(user)
   return <>{
     user &&
     <DefaultLayout>{children}</DefaultLayout>

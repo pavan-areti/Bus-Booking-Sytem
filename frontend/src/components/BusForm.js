@@ -2,8 +2,7 @@ import React from "react";
 import { Col, Input, message, Modal, Row } from "antd";
 import Form from "antd/es/form/Form";
 import { axiosInstance } from "../helpers/axiosInstance";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../redux/alertsSlice";
+import useStore from "../stores/store";
 
 function BusForm({
   showBusForm,
@@ -13,10 +12,10 @@ function BusForm({
   getData,
   setSelectedBus,
 }) {
-  const dispatch = useDispatch();
+  const {showLoading,hideLoading} = useStore((state)=> state.alertsSlice)
   const onFinish = async (values) => {
     try {
-      dispatch(showLoading());
+      showLoading();
       let response = null;
       if (type === "add") {
         response = await axiosInstance.post("/api/buses/add-bus", {
@@ -36,11 +35,12 @@ function BusForm({
       }
       getData();
       setShowBusForm(false);
-      dispatch(hideLoading());
       setSelectedBus(null);
     } catch (err) {
-      dispatch(hideLoading());
       console.log(err);
+    }
+    finally{
+      hideLoading();
     }
   };
   return (

@@ -1,27 +1,26 @@
 import React, { useEffect, useCallback } from "react";
 import { Col, message, Row } from "antd";
-import { useDispatch } from "react-redux";
 import { axiosInstance } from "../helpers/axiosInstance";
-import { hideLoading, showLoading } from "../redux/alertsSlice";
 import { useParams } from "react-router-dom";
 import SeatSelection from "../components/SeatSelection";
 import "../resources/bus.css";
 import StripeCheckout from "react-stripe-checkout";
+import useStore from "../stores/store";
 
 function BookNow() {
   const [bus, setBus] = React.useState([]);
   const [selectedSeats, setSelectedSeats] = React.useState([]);
-  const dispatch = useDispatch();
+  const {showLoading,hideLoading} = useStore((state)=>state.alertsSlice)
   const params = useParams();
 
   //get buses
   const getBus = useCallback(async () => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axiosInstance.post("/api/buses/get-bus", {
         id: params.id,
       });
-      dispatch(hideLoading());
+      hideLoading();
       if (response.data.success) {
         message.success(response.data.message);
         setBus(response.data.data);
@@ -29,21 +28,21 @@ function BookNow() {
         message.error(response.data.message);
       }
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       console.log(err);
     }
-  }, [dispatch, params.id]);
+  }, [hideLoading, params.id, showLoading]);
 
   const bookNow = async (paymentDetails) => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axiosInstance.post("/api/bookings/book-seats", {
         bus: params.id,
         seats: selectedSeats,
         transactionId: paymentDetails.id,
         totalAmount: paymentDetails.amount / 100,
       });
-      dispatch(hideLoading());
+      hideLoading();
 
       if (response.data.success) {
         setSelectedSeats([]);
@@ -53,15 +52,15 @@ function BookNow() {
         message.error(response.data.message);
       }
 
-      dispatch(hideLoading());
+      hideLoading();
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       console.log(err);
     }
   };
   const onToken = async (token) => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axiosInstance.post("/api/bookings/make-payment", {
         token,
         amount: selectedSeats.length * bus.price * 100,
@@ -73,9 +72,9 @@ function BookNow() {
       } else {
         message.error(response.data.message);
       }
-      dispatch(hideLoading());
+      hideLoading();
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       console.log(err);
     }
   };

@@ -1,16 +1,15 @@
 import { Col, Row, message } from "antd";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../redux/alertsSlice";
 import { UserCard } from "../../components/UI/UserCard";
 import { Button } from "../../components/UI/Button";
+import useStore from "../../stores/store";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [userChanges, setUserChanges] = useState({});
+  const {showLoading,hideLoading} = useStore((state)=>state.alertsSlice)
 
-  const dispatch = useDispatch();
 
   const handleFieldChange = (userId, field, value) => {
     setUserChanges((prevState) => ({
@@ -24,7 +23,7 @@ function AdminUsers() {
 
   const getUsers = useCallback(async () => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axios.post("/api/users/get-users", {});
       if (response.data.success) {
         message.success("users fetched succesfully");
@@ -32,16 +31,16 @@ function AdminUsers() {
       } else {
         message.error(response.data.message);
       }
-      dispatch(hideLoading());
+      hideLoading();
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       message.error(err.message);
     }
-  }, [dispatch]);
+  }, [hideLoading, showLoading]);
 
   const onSave = async () => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axios.post("/api/users/update-access", {
         data: userChanges,
       });
@@ -51,9 +50,9 @@ function AdminUsers() {
       } else {
         message.error(response.data.message);
       }
-      dispatch(hideLoading());
+      hideLoading();
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       message.error(err.message);
     }
   };

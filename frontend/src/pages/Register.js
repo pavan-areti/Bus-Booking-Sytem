@@ -2,12 +2,12 @@ import React,{useEffect} from "react";
 import { Form, Input,message } from "antd";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
-import { hideLoading, showLoading } from "../redux/alertsSlice";
-import { useDispatch } from "react-redux";
+import useStore from "../stores/store";
 
 const Register = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const {showLoading,hideLoading} = useStore((state)=>state.alertsSlice)
+
   useEffect(() => {
     if(localStorage.getItem("token")){
       navigate("/");
@@ -16,12 +16,12 @@ const Register = () => {
   
   const onFinish = async (values) => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const res = await axios.post(
         "/api/users/register",
         values
       );
-      dispatch(hideLoading());
+      hideLoading();
       if(res.data.success){
         message.success(res.data.message);
         navigate("/login");
@@ -30,7 +30,7 @@ const Register = () => {
         message.error(res.data.message);
       }
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
        message.error(err.message);
     }
   };

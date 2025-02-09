@@ -1,17 +1,16 @@
 import { message, Table } from "antd";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import BusForm from "../../components/BusForm";
 import PageTitle from "../../components/PageTitle";
 import { axiosInstance } from "../../helpers/axiosInstance";
-import { hideLoading, showLoading } from "../../redux/alertsSlice";
+import useStore from "../../stores/store";
 // import moment from "moment";
 
 function AdminBuses() {
-  const dispatch = useDispatch();
   const [showBusForm, setShowBusForm] = React.useState(false);
   const [buses, setBuses] = React.useState([]);
   const [selectedBus, setSelectedBus] = React.useState(null);
+  const {showLoading,hideLoading} = useStore((state)=>state.alertsSlice)
 
   const columns = [
     {
@@ -73,28 +72,28 @@ function AdminBuses() {
   //get buses
   const getBuses = useCallback(async () => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axiosInstance.post("/api/buses/get-buses", {});
-      dispatch(hideLoading());
+      hideLoading();
       if (response.data.success) {
         setBuses(response.data.data);
       } else {
         message.error(response.data.message);
       }
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       console.log(err);
     }
-  }, [dispatch]);
+  }, [hideLoading, showLoading]);
 
   //delete bus
   const deleteBus = async (id) => {
     try {
-      dispatch(showLoading());
+      showLoading();
       const response = await axiosInstance.post("/api/buses/delete-bus", {
         id,
       });
-      dispatch(hideLoading());
+      hideLoading();
       if (response.data.success) {
         message.success(response.data.message);
         getBuses();
@@ -102,7 +101,7 @@ function AdminBuses() {
         message.error(response.data.message);
       }
     } catch (err) {
-      dispatch(hideLoading());
+      hideLoading();
       console.log(err);
     }
   };
